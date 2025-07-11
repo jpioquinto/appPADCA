@@ -10,7 +10,7 @@ export default function Mapa() {
     [40.96548, -5.66443], [40.96527, -5.66338], [40.96451, -5.66373], [40.9647, -5.66468]
   ]);*/
 
-  const setColor = ({ properties }) => {
+  const setColor = () => {
     return { weight: 1, opacity: 1, fillColor:'#909090 ', color: 'white', dashArray: '3', fillOpacity: 1.0};
   }
 
@@ -25,7 +25,7 @@ export default function Mapa() {
             attribution={"&copy;PADCA"}
         />
         <GeoJSON 
-            data={republica} style={setColor}
+            data={republica as never} style={setColor}
             onEachFeature={onEachFeature}
         />
     </MapContainer>

@@ -25,6 +25,8 @@ export default function Layout() {
 
     const setInterceptor = useConfigStore(state => state.setInterceptor);
 
+    const initContentUrl = useConfigStore(state => state.initContentUrl);
+
     const {setIsLoading, loadShow, loadHidden} = useLoadingStore();
 
     const {obtenerMenu} = useNavBarStore();
@@ -52,12 +54,13 @@ export default function Layout() {
     };
 
     useEffect(() => {  
-        activarInterceptor();                 
+        activarInterceptor()                 
         if (!isAuthenticated || token==='' || !token) {
-            navigate('./login');
+            navigate('./login')
             return;
         }
-        obtenerMenu();
+        obtenerMenu()
+        initContentUrl()
     }, [isAuthenticated]);    
 
     return (

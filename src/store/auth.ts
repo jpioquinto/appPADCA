@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import type { Auth, UserAuth , Contact} from '../types'
 
+import avatar from '../assets/images/avatars/default.png'
+
 type AuthState = Auth & {
     getFoto:() => string
     setFoto:(foto: Contact['foto']) => void
@@ -31,7 +33,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         correo:'',
         foto:''
     },
-    getFoto:() => get().contact.foto || '',
+    getFoto:() => get().contact.foto || avatar,
     setFoto:(foto) => {
         const contact = {...get().contact, foto}
         set({contact})

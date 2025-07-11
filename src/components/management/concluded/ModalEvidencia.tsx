@@ -1,8 +1,9 @@
-import {type MouseEvent, useEffect} from 'react'
+import {type MouseEvent, useEffect, useMemo} from 'react'
 
 import { useConflictStore } from '../../../store/conflict/conflictStore'
 import { useCaptureStore } from '../../../store/conflict/captureStore'
-import { baseURL, makeHash } from '../../../utils'
+import { useFileStore } from '../../../store/conflict/fileStore'
+import { baseURL } from '../../../utils'
 import type { PropsModal } from '../../../types'
 
 type Modaltype = {
@@ -15,10 +16,16 @@ export default function ModalEvidencia({propModal, close}: Modaltype) {
 
     const parametro = useConflictStore(state => state.parametro)
 
+    const {contentURL, initContentUrl, getContentUrl, getMimeType} = useFileStore()
+
+    const showEvidence = useMemo(() => contentURL.trim() !== '', [contentURL])
+
     const clickItem = (index:number) => {
         setCurrentIndex(index)
-        if (parametro.captura?.docs && parametro.captura?.docs.length > 0) {
-            setItemSelected(parametro.captura?.docs[getCurrentIndex()] + `?hash=${makeHash(5)}`)
+        if (parametro.captura?.docs && parametro.captura?.docs.length > 0) {//+ `?hash=${makeHash(5)}`
+            setItemSelected(parametro.captura?.docs[getCurrentIndex()])
+
+            initContentUrl(getItemSelected())
         }
     }
 
@@ -59,12 +66,15 @@ export default function ModalEvidencia({propModal, close}: Modaltype) {
                             </div>                            
                         </div>
                         <div className='col-md-9'>
-                            <embed
-                                src={`${baseURL()}/storage/${getItemSelected()}`}
-                                type='application/pdf'
-                                className='w-100'
-                                height={600}                              
-                            />
+                            {showEvidence && 
+                                (<embed
+                                    src={getContentUrl()}
+                                    type={getMimeType()}
+                                    className='w-100'
+                                    height={600}                                                                 
+                                />)
+                            }
+                            
                         </div>
                     </div>
                 </div>

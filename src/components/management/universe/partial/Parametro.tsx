@@ -52,7 +52,7 @@ export default function Parametro({parametro, etapaId, clickParametro}: Parametr
         const $capture: (number | string)[] = Array.isArray(capture) ? capture : []
 
         if (parametro.captura?.type==='array') {
-            console.log(isArray ? format.applyFormatDateShort($capture).join(',')  : formatDateShort(capture.toString()) )    
+            //console.log(isArray ? format.applyFormatDateShort($capture).join(',')  : formatDateShort(capture.toString()) )    
         }
 
         if (['CantidadNumerica', 'CantidadEntera'].includes(parametro.accion!)) {

@@ -19,6 +19,7 @@ import ErrorForm from '../../partial/ErrorForm'
 import useModal from '../../../hooks/useModal'
 import { notificacion } from '../../../utils'
 import { makeHash } from '../../../utils'
+import { AxiosError } from 'axios'
 
 type Modaltype = {
     propModal:PropsModal,
@@ -102,10 +103,14 @@ export default function ModalRegistro({propModal, close}: Modaltype) {
             } else {
                 throw new Error(result?.response?.data?.message || result.message)
             }
-        } catch(error) {
-            if (!(error instanceof Error)) {                
-                notificacion('Ocurrió un error al realizar la operación. ' + (error as Error).message , 'error')
-                return
+        } catch(error:AxiosError|Error|any) {
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
             }
             notificacion(error.message, 'error')
         }
@@ -136,7 +141,8 @@ export default function ModalRegistro({propModal, close}: Modaltype) {
         })
 
         setOptionsMunpios($options)   
-        initMunpio($options.filter($option => $option.value === munpioId))     
+        
+        setTimeout(() => initMunpio($options.filter($option => $option.value === munpioId)), 1200)
     } , [currentMnpios])
 
     useEffect(() => {

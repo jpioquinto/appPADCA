@@ -1,7 +1,7 @@
-import {type MouseEvent } from 'react';
+import {type MouseEvent} from 'react'
 
 import type { Parametro as TypeParametro, Etapa as TypeEtapa } from '../../../../types/conflicto'
-import Parametros from './Parametros';
+import Parametros from './Parametros'
 
 type EtapaProps = {
     etapa:TypeEtapa,
@@ -11,6 +11,7 @@ type EtapaProps = {
 }
 
 export default function Etapa({etapa, posicion, clickElement, clickParametro}: EtapaProps) {
+    //const Parametros = lazy(() => import(`./Parametros.tsx`))
 
   return (
     <div className="accordion-item">

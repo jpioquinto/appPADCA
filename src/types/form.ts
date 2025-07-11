@@ -65,7 +65,7 @@ export type DraftFormPerfil = {
     apMaterno?:string|null,
     cargo:string,
     puestoId:string|number,
-    munpioId?:string,
+    munpioId?:string|null,
     edoId:string|number,
     correo:string,
     foto?:string|null,

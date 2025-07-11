@@ -7,6 +7,7 @@ import { notificacion } from "../utils"
 
 import { useConfigStore } from "../store/config"
 import $axios from "../utils/axios"
+import { AxiosError } from "axios"
 
 type Toggle = {
     aria:boolean,
@@ -21,7 +22,7 @@ const initState = {
 export function useItemUserNav() {
     const getInterceptor = useConfigStore(state => state.getInterceptor);
 
-    const {contact, user, setUser, setToken, setContact, setAuthenticated} = useAuthStore();
+    const {contact, user, setUser, setToken, setContact, setAuthenticated, getFoto} = useAuthStore();
     
     const [toggle, setToggle] = useState<Toggle>(initState);
 
@@ -63,8 +64,16 @@ export function useItemUserNav() {
             } else {
                 throw new Error(result?.response?.data?.message || result.message);
             }
-        } catch (error) {
-            notificacion(error?.message, 'error');
+        } catch (error:AxiosError|Error|any) {
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
+            }
+            notificacion(error.message, 'error');
             return error;
         }
         
@@ -90,6 +99,7 @@ export function useItemUserNav() {
         user,
         toggle,
         contact,
+        getFoto,
         clickLogout,
         handlerToggle
     }

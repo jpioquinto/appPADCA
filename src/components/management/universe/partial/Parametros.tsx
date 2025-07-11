@@ -11,7 +11,7 @@ type ParamsProps = {
 export default function Parametros({params, etapaId, clickParametro}: ParamsProps) {
     const totalColumn = useMemo(() => params.length > 5 ? 2 : 1,[params])
     const elemColumn  = useMemo(() => Math.round(params.length/2), [params])
-
+    
   return (
     <div className='row'>
       {

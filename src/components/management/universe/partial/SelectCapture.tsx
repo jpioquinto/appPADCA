@@ -25,7 +25,7 @@ export default function SelectCapture({parametro}: CaptureProps) {
     const {options, state} = useCapture()
 
     const [capture, setCapture] = useState<string|number|undefined>( state.initValueCapture(parametro.captura?.value.toString()) )
-    
+        
     const closeModal = () => {
         initCapture(parametro.etapaId, parametro.id);
         MySwal.close();

@@ -110,7 +110,7 @@ export default function InfoCaptura({parametro}: CaptureProps) {
                 )}
                 
                 <div className='d-inline-flex justify-content-center'>
-                    <button type="button" className="btn btn-success btn-sm textl-white fw-semibold" onClick={clickCargarDoc}>Aceptar</button>&nbsp; 
+                    <button type="button" className="btn btn-success btn-sm textl-white fw-semibold" onClick={clickCargarDoc}>Aceptar</button> 
                     <button type="button" className="btn btn-secondary btn-sm fw-semibold" onClick={clickCerrarModal}><i className="fa fa-window-close"></i> Cerrar</button>
                 </div>
             </div>
@@ -119,16 +119,14 @@ export default function InfoCaptura({parametro}: CaptureProps) {
             <div className='d-inline-flex'>
                 <p>¿Qué acción desea realizar?</p>
             </div>
-            <div className='d-inline-flex justify-content-center'>
+            <div className='d-flex justify-content-around'>
                 {parametro?.requiereDoc === 1 && (
                     <button type="button" className="btn btn-success btn-sm textl-white fw-semibold" onClick={clickShowCargarDoc}>Cargar documento</button>
-                )}
-                &nbsp; 
+                )}                 
                 {parametro?.accion !== 'Afirmacion1' && (
                     <button type="button" className="btn btn-info btn-sm textl-white fw-semibold" onClick={clickEditar}>Editar la captura</button>
-                )}
-                &nbsp;   
-                <button type="button" className="btn btn-warning btn-sm text-white fw-semibold" onClick={clickElimiinar}>Eliminar la captura</button>&nbsp; 
+                )}                   
+                <button type="button" className="btn btn-warning btn-sm text-white fw-semibold" onClick={clickElimiinar}>Eliminar la captura</button> 
                 <button type="button" className="btn btn-secondary btn-sm fw-semibold" onClick={clickCerrarModal}><i className="fa fa-window-close"></i> Cerrar</button>
             </div>
         </div>

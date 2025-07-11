@@ -11,6 +11,7 @@ import logoTerritorio from './../assets/images/logos/desarrollo_territorial.png'
 
 import $axios from '../utils/axios'
 import { baseURL } from '../utils'
+import { AxiosError } from 'axios'
 
 type FormProps = {
     nickname:string,
@@ -45,7 +46,7 @@ export default function Login() {
         }   
     }, [])
 
-    const handleErrorsLogin = (error:any) => {
+    const handleErrorsLogin = (error:AxiosError|Error|any) => {
         loadHidden();
         toast.error(error.response.data.message, {
             position:"bottom-right",

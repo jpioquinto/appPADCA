@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useItemUserNav } from '../../hooks/useItemUserNav'
 
-
 export default function ItemUserNav() {
-    const {contact, toggle, clickLogout, handlerToggle} = useItemUserNav()
+    const {contact, toggle, getFoto, clickLogout, handlerToggle} = useItemUserNav()    
 
   return (
     <>
@@ -13,7 +12,7 @@ export default function ItemUserNav() {
             onClick={handlerToggle}    
         >
             <div className="avatar-sm">
-                <img src={contact.foto!} alt="Avatar de perfil" className="avatar-img rounded-circle" />
+                <img src={getFoto()} alt="Avatar de perfil" className="avatar-img rounded-circle" />
             </div>
             <span className="profile-username">
                 <span className="op-7">Bienvenid@,</span> <span className="fw-bold">{contact.nombre}</span>
@@ -23,7 +22,7 @@ export default function ItemUserNav() {
             <div className="dropdown-user-scroll scrollbar-outer">
                 <li>
                     <div className="user-box">
-                        <div className="avatar-lg"><img src={contact.foto!} alt="imagen de perfil" className="avatar-img rounded" /></div>
+                        <div className="avatar-lg"><img src={getFoto()} alt="imagen de perfil" className="avatar-img rounded" /></div>
                         <div className="u-text">
                             <h4>{contact.nombre}</h4>
                             <p className="text-muted">{contact.correo ? contact.correo : 'Sin correo electrónico'}</p>

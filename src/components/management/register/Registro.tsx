@@ -15,6 +15,7 @@ import { notificacion, isInteger} from '../../../utils'
 import { useEdoStore } from '../../../store/edoStore'
 import ErrorForm from '../../partial/ErrorForm'
 import type { Option } from '../../../types'
+import { AxiosError } from 'axios'
 
 export default function Registro() {
     const {currentMnpios, listEdos, getEdos, listMunpios} = useEdoStore();
@@ -63,12 +64,20 @@ export default function Registro() {
             const result = await saveConflicto(data);
             
             if (result?.solicitud) {
-                reset(); setProblematica(''); setMunpioId(''); setOptionsMunpios([]); selectedMunpio({label:'', value:0});
+                reset(); setProblematica(''); setMunpioId(''); setOptionsMunpios([]); selectedMunpio({label:'', value:0} as SingleValue<Option>, {} as ActionMeta<Option>);
                 setObservaciones(''); notificacion(result.message, 'success');
             } else {
                 throw new Error(result?.response?.data?.message || result.message);
             }
-        } catch(error) {
+        } catch(error:AxiosError|Error|any) {
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
+            }
             notificacion(error.message, 'error');
         }
     }

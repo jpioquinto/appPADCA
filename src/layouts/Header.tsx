@@ -56,7 +56,7 @@ export default function Header() {
                                 </form>
                             </ul>
                         </li>                        
-                        <li className="nav-item topbar-icon dropdown hidden-caret">
+                        <li className="nav-item topbar-icon dropdown hidden-caret invisible">
                            <ItemActionsNav /> 
                         </li>
                         

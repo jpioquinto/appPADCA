@@ -1,7 +1,7 @@
 import type { Acciones, Accion } from '../types'
 import { toast } from 'react-toastify'
 
-export const baseURL = () => import.meta.env.VITE_APP_URL ? import.meta.env.VITE_APP_URL : ''
+export const baseURL = () => import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : ''
 
 export const removeClase = (clases: string[], clase: string) : string => {
     const resulado = clases.filter($clase => $clase!==clase);
@@ -33,10 +33,16 @@ export const tienePermiso = (acciones: Acciones, permisoId:Accion['id']) => {
 }
 
 export const notificacion = (message:string, $type:string, _time:number = 300) => {
-    toast[$type](message, {
+    /*toast[$type](message, {
         position:"bottom-right",
         theme:"colored"
-    });
+    });*/
+    switch($type) {
+        case 'success': toast.success(message, {position:"bottom-right", theme:"colored"}); break;
+        case 'info': toast.info(message, {position:"bottom-right", theme:"colored"}); break;
+        case 'warn': toast.warn(message, {position:"bottom-right", theme:"colored"}); break;
+        case 'error': toast.error(message, {position:"bottom-right", theme:"colored"}); break;
+    }
 }
 
 export const isInteger = (value: string): boolean => {

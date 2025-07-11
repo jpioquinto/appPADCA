@@ -14,6 +14,7 @@ import { useAuthStore } from '../../store/auth'
 import ErrorForm from '../partial/ErrorForm'
 import { notificacion } from '../../utils'
 import FotoPerfil from './FotoPerfil'
+import { AxiosError } from 'axios'
 
 
 export default function EditarPerfil() {
@@ -23,9 +24,11 @@ export default function EditarPerfil() {
 
     const [optionsMunpios, setOptionsMunpios] = useState<Option[]>([])
 
+    const [munpioSelected, setMunpioSelected] = useState<Option>({} as Option)
+
     const {listPuestos, getPuestos} = useContactStore()
 
-    const [munpioId, setMunpioId] = useState<string>('')
+    const [munpioId, setMunpioId] = useState<number>(0)
 
     const schema = z.object({
         nombre:z.optional(z.string()).nullable(),
@@ -33,7 +36,7 @@ export default function EditarPerfil() {
         apMaterno:z.optional(z.string()).nullable(),
         cargo:z.string().min(6, {message: 'Ingrese un cargo válido.'}),    
         puestoId:z.string().min(1, {message: 'Seleccione el puesto.'}),
-        munpioId:z.optional(z.string().min(1, {message: 'Seleccione el municipio o alcaldía.'})),
+        munpioId:z.optional(z.string()).nullable(),
         edoId:z.string().min(1, {message: 'Seleccione la entidad federativa.'}),
         correo:z.string().trim().email('Ingrese una dirección de correo válida.'),
         foto:z.optional(z.string()).nullable()
@@ -46,7 +49,7 @@ export default function EditarPerfil() {
         })
     
     const registerContact = async (data: DraftFormPerfil) => {
-        data.munpioId = munpioId
+        data.munpioId = munpioId.toString()
         try {
             const result = await saveContacto(data)
            
@@ -61,7 +64,15 @@ export default function EditarPerfil() {
             } else {
                 throw new Error(result?.response?.data?.message || result.message)
             }
-        } catch(error) {
+        } catch(error:AxiosError|Error|any) {
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
+            }
             notificacion(error.message, 'error')
         }
         
@@ -73,9 +84,18 @@ export default function EditarPerfil() {
     }
     
     const selectedMunpio = (newValue: SingleValue<Option>, _actionMeta: ActionMeta<Option>) => {
+        console.log(newValue?.value)
         if (newValue?.value) {
-            setMunpioId(newValue.value as string)
+            setMunpioId(+newValue.value)
+            setMunpioSelected(newValue)
         }        
+    }
+
+    const initMunpio = (munpio: Option[]) => {
+        if (munpio.length == 0) {
+            return 
+        }
+        setMunpioSelected(munpio[0])
     }
 
     useEffect(() => {
@@ -90,6 +110,9 @@ export default function EditarPerfil() {
         })
 
         setOptionsMunpios($options)
+
+        setTimeout(() => initMunpio($options.filter($option => +$option.value === +munpioId)), 1200)
+         
     } , [currentMnpios])
 
     useEffect(() => {
@@ -105,6 +128,9 @@ export default function EditarPerfil() {
         if (contact.edoId) {
             listMunpios(+contact.edoId)
         }   
+        if (contact.munpioId) {
+            setMunpioId(+contact.munpioId)
+        }
     }, [contact])
 
   return (
@@ -189,7 +215,7 @@ export default function EditarPerfil() {
                                                 <label htmlFor="id-municipio">Alcaldía / Municipio</label>                                    
                                                 <Select 
                                                     placeholder='Seleccione...'
-                                                    value={optionsMunpios.filter(({ value }) => value === contact.munpioId)}
+                                                    value={munpioSelected}
                                                     options={optionsMunpios} 
                                                     menuPortalTarget={document.body}
                                                     styles={{

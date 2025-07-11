@@ -18,7 +18,7 @@ export default function InputSuperficie({parametro}: CaptureProps) {
     const {state} = useCapture()
 
     const [superficie, setSuperficie] = useState<Superficie>( state.initSuperficie(parametro.captura?.value.toString().split('-') || []) )
-
+    
     const endCapture = () => {
         updateCapturaEtapa(parametro.etapaId, parametro.id, {value:`${superficie.ha}-${superficie.a}-${superficie.ca}`, type:'string'} as ValueCapture); 
         closeModal();

@@ -3,6 +3,7 @@ import { RegistrosSchema, Etapas, ResponseLoadFile } from "../schema/conflicto-s
 import type { DraftFormConflicto } from "../types/form"
 import $axios from '../utils/axios'
 import { baseURL } from "../utils"
+import { AxiosError } from "axios"
 
 type ConflictDelete = Pick<Registro, 'id'>
 
@@ -84,13 +85,9 @@ export async function uploadDoc(conflictoId: Registro['id'], parametroId: Parame
             return result.success ? result.data : response.data;
         }
         return response.data;           
-    } catch(error) {
-        if (Object.prototype.hasOwnProperty.call(error,'response')) {
+    } catch(error:AxiosError|Error|any) {
+        if ((error instanceof AxiosError)) {
             return error?.response?.data 
-        }
-
-        if (!(error instanceof Error)) {
-            return {solicitud:false, message:'Ocurrió un error al realizar la operación. ' + (error as Error).message}
         }
         return error      
     } 

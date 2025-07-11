@@ -11,6 +11,7 @@ import { notificacion } from '../utils';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useModalStore } from '../store/modal';
+import { AxiosError } from 'axios';
 
 const MySwal = withReactContent(Swal)
 
@@ -102,10 +103,14 @@ export function useSeguimiento() {
             } else {
                 throw new Error(result?.response?.data?.message || result.message);
             }
-        } catch(error) {
-            if (!(error instanceof Error)) {                
-                notificacion('Ocurrió un error al realizar la operación. ' + (error as Error).message , 'error')
-                return
+        } catch(error:AxiosError|Error|any) {
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
             }
             notificacion(error.message, 'error')
         } finally {

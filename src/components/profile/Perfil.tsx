@@ -44,6 +44,12 @@ export default function Perfil() {
                             <div className="card-body">
                                 <TablaPerfils perfils={perfils} key={keyTable} />
                                 <ModalPerfil propModal={modal} close={closeModal}/>
+
+                                <ul className='list-group'>
+                                    <li className='list-group-item'>|-- Inicio</li>
+                                    <li className='list-group-item'>|-- Módulo</li>
+                                    <li className='list-group-item'>|-- Administración</li>
+                                </ul>
                             </div>
                         </div>
                     </div>

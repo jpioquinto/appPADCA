@@ -1,4 +1,4 @@
-import React, {lazy, useEffect, useMemo, type MouseEvent, type ReactNode} from 'react'
+import React, {useEffect, useMemo, type MouseEvent, type ReactNode} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 import type { Etapa as TypeEtapa, Parametro } from '../../../types/conflicto'
@@ -9,6 +9,10 @@ import { useModuloStore } from '../../../store/modulo'
 import { tienePermiso } from '../../../utils'
 import type { Acciones } from '../../../types'
 import useModal from '../../../hooks/useModal'
+
+import InputSuperficie from './partial/InputSuperficie'
+import SelectCapture from './partial/SelectCapture'
+import InfoCaptura from './partial/InfoCaptura'
 import Afirmacion from './partial/Afirmacion'
 import Etapa from './partial/Etapa'
 
@@ -21,21 +25,26 @@ export default function Seguimiento() {
 
     const {modal, closeModal} = useModal()
 
-    //const [problematica, setProblematica] = useState<JSX.Element>(<>{conflicto.problematica}</>)
-
     const navigate = useNavigate()
 
     const elemProblem = ():ReactNode => <>{conflicto.problematica}</>
 
     const loadComponent = (component:string): React.ComponentType<any> => {
-        return lazy(() => import(`./partial/${component}.tsx`))
+        const components = {
+            'Afirmacion': Afirmacion,
+            'InfoCaptura': InfoCaptura,
+            'InputSuperficie': InputSuperficie,
+            'SelectCapture': SelectCapture,
+        }
+        return Object.prototype.hasOwnProperty.call(components, component) 
+            ? components[component as keyof typeof components] : Afirmacion
     }
 
     const accionAfirmacion = (parametro:Parametro, etapaId:TypeEtapa['id']) => {
         if (!parametro?.captura) {                       
             initCapture(etapaId, parametro.id);
         }
-
+        
         MySwal.fire({
             title:"Elija una opción",
             text: `¿Qué acción desea realizar?`,

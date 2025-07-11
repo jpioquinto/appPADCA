@@ -30,14 +30,12 @@ export default function ModalPerfil({propModal, close}: Modaltype) {
 
     }
 
-    const {listPermissions, permissions, perfil} = usePerfilStore()
+    const {listPermissions, perfil} = usePerfilStore()
 
     useEffect(() => {
         setValue('nombre', perfil.nombre)
         setValue('descripcion', perfil.descripcion)
-        listPermissions(perfil.id)
-
-        console.log(permissions)
+        listPermissions(perfil.id)        
     }, [perfil])
 
   return (
@@ -87,7 +85,13 @@ export default function ModalPerfil({propModal, close}: Modaltype) {
                                 <span className="h5">
                                     <i className="fa flaticon-lock-1"></i> Permisos a Módulos
                                 </span><hr />
-                                <div id="jq_arbol_modulos"></div>
+                                <div id="jq_arbol_modulos ps-3 py-3">
+                                    <ul className='list-group'>
+                                        <li className='list-group-item'>Inicio</li>
+                                        <li className='list-group-item'>Módulo</li>
+                                        <li className='list-group-item'>Administración</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>                   
                     </div>

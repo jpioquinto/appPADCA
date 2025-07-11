@@ -14,6 +14,12 @@ export const ValueCapture = z.object({
         'type':z.string()
 })
 
+export const ContentFile = z.object({
+        'solicitud':z.optional(z.boolean()).nullable(),
+        'data':z.string(),
+        'mime':z.optional(z.string()).nullable()
+})
+
 export const Parametro = z.object({
         'id':z.number(),
         'etapaId':z.number(),

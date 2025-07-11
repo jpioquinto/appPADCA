@@ -3,6 +3,7 @@ import {type ChangeEvent, type MouseEvent, useState} from 'react'
 import { cargarFoto } from '../../services/ContactSevice'
 import { useUserNav } from '../../hooks/useUserNav'
 import { notificacion } from '../../utils'
+import { AxiosError } from 'axios'
 
 export default function FotoPerfil() {
     const {getFoto, setFoto} = useUserNav()
@@ -25,7 +26,15 @@ export default function FotoPerfil() {
            } else {
                 throw new Error(result?.response?.data?.message || result.message)
            }
-        } catch (error) {            
+        } catch (error:AxiosError|Error|any) {  
+            if ((error instanceof AxiosError)) {
+                let message = (error as Error).message
+                if (error?.response?.data?.message) {
+                    message = error.response.data.message
+                }              
+                notificacion(`Ocurrió un error al realizar la operación. ${message}` , 'error')
+                return 
+            }          
             notificacion(error.message, 'error')
         }
     }
